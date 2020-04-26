@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "512690821134",
+    "firebase_url": "https://harishfertilzers.firebaseio.com",
+    "project_id": "harishfertilzers",
+    "storage_bucket": "harishfertilzers.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:512690821134:android:c355da9143d568e73a045f",
+        "android_client_info": {
+          "package_name": "com.gutta.harinifertilizers"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "512690821134-3sa8n8tchhugr5ts2t9go0etcen1bspu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBurB2AZ2KDClTM6bNUo6deohnC36YnY8o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "512690821134-3sa8n8tchhugr5ts2t9go0etcen1bspu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
