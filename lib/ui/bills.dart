@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:harinifertilizers/database/readregisteredfarmers.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:harinifertilizers/database/transactions.dart';
-import 'package:harinifertilizers/ui/billsearch.dart';
 
 class Bills extends StatefulWidget {
   String selectedFarmerValue;
@@ -23,7 +20,8 @@ class Bills extends StatefulWidget {
   List<Map<String, dynamic>> listOfBills;
 
   @override
-  State<StatefulWidget> createState() => BillsState(selectedFarmerValue, selectedTypeValue, billNo, billsStartDate, billsEndDate);
+  State<StatefulWidget> createState() => BillsState(selectedFarmerValue,
+      selectedTypeValue, billNo, billsStartDate, billsEndDate);
 }
 
 class BillsState extends State<Bills> {
@@ -35,8 +33,8 @@ class BillsState extends State<Bills> {
   String billsStartDate;
   String billsEndDate;
 
-  BillsState(String selectedFarmerValue, String selectedTypeValue, String billNo,
-      String billsStartDate, String billsEndDate) {
+  BillsState(String selectedFarmerValue, String selectedTypeValue,
+      String billNo, String billsStartDate, String billsEndDate) {
     this.selectedFarmerValue = selectedFarmerValue;
     this.selectedTypeValue = selectedTypeValue;
     this.billNo = billNo;
@@ -47,7 +45,13 @@ class BillsState extends State<Bills> {
   @override
   void initState() {
     super.initState();
-    listOfBills = new Transactions().searchBills(selectedFarmerValue.toLowerCase().replaceAll(" ", ""), selectedTypeValue, billNo, billsStartDate, billsEndDate, this);
+    listOfBills = new Transactions().searchBills(
+        selectedFarmerValue.toLowerCase().replaceAll(" ", ""),
+        selectedTypeValue,
+        billNo,
+        billsStartDate,
+        billsEndDate,
+        this);
   }
 
   @override
@@ -119,42 +123,44 @@ class BillsState extends State<Bills> {
     int count = 2;
     Color bgColor;
     listOfBills.forEach((item) => {
-      bgColor = (count % 2 == 0) ? Colors.white : Color.fromRGBO(210, 245, 210, 1.0),
-      count++,
-      rows.add(TableRow(children: [
-        Column(children: [
-          Container(
-              decoration: BoxDecoration(color: bgColor),
-              padding: EdgeInsets.fromLTRB(6.0, 0.0, 0.0, 0.0),
-              alignment: Alignment.centerLeft,
-              child: Text(item['billdate'],
-                  style: TextStyle(
-                    fontSize: 18,
-                  )))
-        ]),
-        Column(children: [
-          Container(
-              decoration: BoxDecoration(color: bgColor),
-              padding: EdgeInsets.fromLTRB(6.0, 0.0, 0.0, 0.0),
-              alignment: Alignment.centerLeft,
-              child: Text(item['billno'],
-                  style: TextStyle(
-                    fontSize: 18,
-                  )))
-        ]),
-        Column(children: [
-          Container(
-              decoration: BoxDecoration(color: bgColor),
-              padding: EdgeInsets.fromLTRB(6.0, 0.0, 0.0, 0.0),
-              alignment: Alignment.centerLeft,
-              child: Text(item['amount'],
-                  style: TextStyle(
-                    fontSize: 18,
-                  )))
-        ]),
-        // you can have more properties of course
-      ]))
-    });
+          bgColor = (count % 2 == 0)
+              ? Colors.white
+              : Color.fromRGBO(210, 245, 210, 1.0),
+          count++,
+          rows.add(TableRow(children: [
+            Column(children: [
+              Container(
+                  decoration: BoxDecoration(color: bgColor),
+                  padding: EdgeInsets.fromLTRB(6.0, 0.0, 0.0, 0.0),
+                  alignment: Alignment.centerLeft,
+                  child: Text(item['billdate'],
+                      style: TextStyle(
+                        fontSize: 18,
+                      )))
+            ]),
+            Column(children: [
+              Container(
+                  decoration: BoxDecoration(color: bgColor),
+                  padding: EdgeInsets.fromLTRB(6.0, 0.0, 0.0, 0.0),
+                  alignment: Alignment.centerLeft,
+                  child: Text(item['billno'],
+                      style: TextStyle(
+                        fontSize: 18,
+                      )))
+            ]),
+            Column(children: [
+              Container(
+                  decoration: BoxDecoration(color: bgColor),
+                  padding: EdgeInsets.fromLTRB(6.0, 0.0, 0.0, 0.0),
+                  alignment: Alignment.centerLeft,
+                  child: Text(item['amount'],
+                      style: TextStyle(
+                        fontSize: 18,
+                      )))
+            ]),
+            // you can have more properties of course
+          ]))
+        });
     return rows;
   }
 }

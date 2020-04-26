@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:harinifertilizers/database/transactions.dart';
 import 'package:harinifertilizers/ui/registeredfarmers.dart';
 import 'package:harinifertilizers/ui/utilities.dart';
 
@@ -83,13 +82,13 @@ class ReadRegisteredFarmers {
                 state.selectedFarmerValue = null;
                 state.phoneNumberController.clear();
               }),
-      progressdialog.hide(),
-              new Transactions().showAlert(
+              progressdialog.hide(),
+              Utilities.showAlert(
                   context, 'Success!!!', 'farmer deleted Successfully')
             })
         .catchError((err) => {
-      progressdialog.hide(),
-            new Transactions().showAlert(context, 'Failed!!!', err.toString())
-        });
+              progressdialog.hide(),
+              Utilities.showAlert(context, 'Failed!!!', err.toString())
+            });
   }
 }

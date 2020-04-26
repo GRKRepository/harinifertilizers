@@ -1,8 +1,7 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:harinifertilizers/database/readregisteredfarmers.dart';
-import 'package:harinifertilizers/database/transactions.dart';
 import 'package:harinifertilizers/ui/bills.dart';
+import 'package:harinifertilizers/ui/utilities.dart';
 import 'package:intl/intl.dart';
 
 class BillSearch extends StatefulWidget {
@@ -32,7 +31,7 @@ class BillSearchState extends State<BillSearch> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Bill Search Form",
+          "Bills Search",
         ),
       ),
       body: Container(
@@ -63,7 +62,8 @@ class BillSearchState extends State<BillSearch> {
     return DropdownButton<String>(
       isExpanded: true,
       value: selectedFarmerValue,
-      hint: Text('Please select a farmer  ', style: TextStyle(fontFamily: 'Quicksand')),
+      hint: Text('Please select a farmer  ',
+          style: TextStyle(fontFamily: 'Quicksand')),
       icon: Icon(Icons.arrow_drop_down),
       iconSize: 40.0,
       // elevation: 16,
@@ -88,10 +88,11 @@ class BillSearchState extends State<BillSearch> {
 
   renderBillNo() {
     return TextFormField(
-        controller: billNoController,
-        decoration: InputDecoration(hintText: 'Bill No', suffixIcon: const Icon(Icons.edit, size: 30.0)),
-        keyboardType: TextInputType.text,
-        /*validator: (value) {
+      controller: billNoController,
+      decoration: InputDecoration(
+          hintText: 'Bill No', suffixIcon: const Icon(Icons.edit, size: 30.0)),
+      keyboardType: TextInputType.text,
+      /*validator: (value) {
           if (value.isEmpty) {
             return 'Please enter number';
           }
@@ -99,61 +100,68 @@ class BillSearchState extends State<BillSearch> {
             return 'special characters are not allowed';
           }
           return null;
-        }*/);
+        }*/
+    );
   }
 
   renderBillsStartDateController() {
     return TextFormField(
-        readOnly: true,
-        onTap: () {
-          showDatePicker(
-            context: context,
-            initialDate: DateTime.now(),
-            firstDate: DateTime(DateTime.now().year - 5),
-            lastDate: DateTime(DateTime.now().year + 5),
-          ).then((date) {
-            billsStartDateController.text =
-                DateFormat('dd/MM/yyyy').format(date);
-          });
-        },
-        controller: billsStartDateController,
-        decoration: InputDecoration(hintText: 'Bill Start Date', suffixIcon: const Icon(Icons.calendar_today, size: 30.0)),
-        /*validator: (value) {
+      readOnly: true,
+      onTap: () {
+        showDatePicker(
+          context: context,
+          initialDate: DateTime.now(),
+          firstDate: DateTime(DateTime.now().year - 5),
+          lastDate: DateTime(DateTime.now().year + 5),
+        ).then((date) {
+          billsStartDateController.text = DateFormat('dd/MM/yyyy').format(date);
+        });
+      },
+      controller: billsStartDateController,
+      decoration: InputDecoration(
+          hintText: 'Bill Start Date',
+          suffixIcon: const Icon(Icons.calendar_today, size: 30.0)),
+      /*validator: (value) {
           if (value.isEmpty) {
             return 'Please enter bill date';
           }
           return null;
-        }*/);
+        }*/
+    );
   }
 
   renderBillsEndDateController() {
     return TextFormField(
-        readOnly: true,
-        onTap: () {
-          showDatePicker(
-            context: context,
-            initialDate: DateTime.now(),
-            firstDate: DateTime(DateTime.now().year - 5),
-            lastDate: DateTime(DateTime.now().year + 5),
-          ).then((date) {
-            billsEndDateController.text = DateFormat('dd/MM/yyyy').format(date);
-          });
-        },
-        controller: billsEndDateController,
-        decoration: InputDecoration(hintText: 'Bill End Date', suffixIcon: const Icon(Icons.calendar_today, size: 30.0)),
-        /*validator: (value) {
+      readOnly: true,
+      onTap: () {
+        showDatePicker(
+          context: context,
+          initialDate: DateTime.now(),
+          firstDate: DateTime(DateTime.now().year - 5),
+          lastDate: DateTime(DateTime.now().year + 5),
+        ).then((date) {
+          billsEndDateController.text = DateFormat('dd/MM/yyyy').format(date);
+        });
+      },
+      controller: billsEndDateController,
+      decoration: InputDecoration(
+          hintText: 'Bill End Date',
+          suffixIcon: const Icon(Icons.calendar_today, size: 30.0)),
+      /*validator: (value) {
           if (value.isEmpty) {
             return 'Please enter bill date';
           }
           return null;
-        }*/);
+        }*/
+    );
   }
 
   renderType() {
     return DropdownButton<String>(
       isExpanded: true,
       value: selectedTypeValue,
-      hint: Text('Please select Bill Type  ', style: TextStyle(fontFamily: 'Quicksand')),
+      hint: Text('Please select Bill Type  ',
+          style: TextStyle(fontFamily: 'Quicksand')),
       icon: Icon(Icons.arrow_drop_down),
       iconSize: 40.0,
       elevation: 16,
@@ -177,40 +185,37 @@ class BillSearchState extends State<BillSearch> {
     );
   }
 
-  renderSearchButton(BillSearchState bs){
+  renderSearchButton(BillSearchState bs) {
     return RaisedButton.icon(
         shape: RoundedRectangleBorder(
             borderRadius: new BorderRadius.circular(18.0),
             side: BorderSide(color: Colors.blue)),
-        icon: Icon(Icons.search, size: 30.0,),
+        icon: Icon(
+          Icons.search,
+          size: 30.0,
+        ),
         label: const Text('Search'),
         color: Theme.of(context).primaryColorDark,
         textColor: Theme.of(context).primaryColorLight,
         onPressed: () {
-          Navigator.of(context).push(new MaterialPageRoute(
-              builder: (context) => new Bills(selectedFarmerValue.toLowerCase(), selectedTypeValue,billNoController.text.toString(), billsStartDateController.text.toString(), billsEndDateController.text.toString() ),
-              maintainState: true));
-
+          if (isFormValidationSuccess()) {
+            Navigator.of(context).push(new MaterialPageRoute(
+                builder: (context) => new Bills(
+                    selectedFarmerValue.toLowerCase(),
+                    selectedTypeValue,
+                    billNoController.text.toString(),
+                    billsStartDateController.text.toString(),
+                    billsEndDateController.text.toString()),
+                maintainState: true));
+          }
         });
   }
 
-  showAlert(BuildContext context, String title, String content) {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(content),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Ok'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
+  bool isFormValidationSuccess() {
+    if (selectedFarmerValue == null) {
+      Utilities.showAlert(context, ' ooops!!!', 'Please select a farmer');
+      return false;
+    }
+    return true;
   }
 }
