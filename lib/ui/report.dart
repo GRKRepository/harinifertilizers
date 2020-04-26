@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui';
 import 'package:flutter/material.dart';
@@ -13,7 +12,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'dart:io';
-import 'dart:ui' as ui;
 
 import 'package:progress_dialog/progress_dialog.dart';
 
@@ -29,15 +27,14 @@ class ReportState extends State<Report> {
   String selectedFarmerValue;
   String selectedInterestRateValue;
   TextEditingController billNoController = TextEditingController();
-  /*TextEditingController totalAmountController = TextEditingController();
-  TextEditingController interestAmountController = TextEditingController();
-  TextEditingController totalAmountWithInterestController =
-      TextEditingController();*/
   TextEditingController interestTillDateController = TextEditingController();
-  TextEditingController totalAnamathAmountWithInterestController = TextEditingController();
-  TextEditingController totalCreditAmountWithInterestController = TextEditingController();
+  TextEditingController totalAnamathAmountWithInterestController =
+      TextEditingController();
+  TextEditingController totalCreditAmountWithInterestController =
+      TextEditingController();
   TextEditingController netAmountController = TextEditingController();
-  TextEditingController totalCashReceivedAmountWithInterestController = TextEditingController();
+  TextEditingController totalCashReceivedAmountWithInterestController =
+      TextEditingController();
 
   List<String> famerNames;
   List<Widget> children;
@@ -80,8 +77,6 @@ class ReportState extends State<Report> {
     return <Widget>[
       renderName(),
       renderInterestRate(),
-      //renderBillNo(),
-      //renderAmount(),
       renderInterestTillDate(),
       Padding(
           padding: EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 0.0),
@@ -115,22 +110,6 @@ class ReportState extends State<Report> {
         );
       }).toList(),
     );
-  }
-
-  renderBillNo() {
-    return TextFormField(
-        controller: billNoController,
-        decoration: InputDecoration(hintText: 'Bill No'),
-        keyboardType: TextInputType.text,
-        validator: (value) {
-          if (value.isEmpty) {
-            return 'Please enter number';
-          }
-          if (!alphanumeric.hasMatch(value)) {
-            return 'special characters are not allowed';
-          }
-          return null;
-        });
   }
 
   renderInterestTillDate() {
@@ -201,14 +180,16 @@ class ReportState extends State<Report> {
         color: Theme.of(context).primaryColorDark,
         textColor: Theme.of(context).primaryColorLight,
         onPressed: () async {
-          progressdialog.show();
-          new Transactions().fetchBillsByFarmerName(
-              selectedFarmerValue.toLowerCase().replaceAll(" ", ""),
-              selectedInterestRateValue,
-              interestTillDateController,
-              this,
-              context,
-              progressdialog);
+          if (isFormValidationSuccess()) {
+            progressdialog.show();
+            new Transactions().fetchBillsByFarmerName(
+                selectedFarmerValue.toLowerCase().replaceAll(" ", ""),
+                selectedInterestRateValue,
+                interestTillDateController,
+                this,
+                context,
+                progressdialog);
+          }
         });
   }
 
@@ -227,13 +208,16 @@ class ReportState extends State<Report> {
                 pw.Image(image),
                 pw.Container(
                     //padding: pw.EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 0.0),
-                    child: pw.Text('Name      : ' + selectedFarmerValue.toString(),
-                        style: pw.TextStyle(
-                          fontSize: 15,
-                          fontWeight: pw.FontWeight.bold,
-                        ))),
+                    child:
+                        pw.Text('Name      : ' + selectedFarmerValue.toString(),
+                            style: pw.TextStyle(
+                              fontSize: 15,
+                              fontWeight: pw.FontWeight.bold,
+                            ))),
                 pw.Text(
-                    'Interest   : ' + selectedInterestRateValue.toString() + "%",
+                    'Interest   : ' +
+                        selectedInterestRateValue.toString() +
+                        "%",
                     style: pw.TextStyle(
                       fontSize: 15,
                       fontWeight: pw.FontWeight.bold,
@@ -260,7 +244,8 @@ class ReportState extends State<Report> {
                     padding: pw.EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
                     child: pw.Text(
                         'Total Anamath Amount With Interest           : ' +
-                            totalAnamathAmountWithInterestController.text.toString(),
+                            totalAnamathAmountWithInterestController.text
+                                .toString(),
                         style: pw.TextStyle(
                           fontSize: 15,
                           fontWeight: pw.FontWeight.bold,
@@ -272,27 +257,28 @@ class ReportState extends State<Report> {
                       fontSize: 15,
                       fontWeight: pw.FontWeight.bold,
                     )),
-            pw.Text(
-                'Total Cash Received Amount With Interest : ' +
-                    totalCashReceivedAmountWithInterestController.text.toString(),
-                style: pw.TextStyle(
-                  fontSize: 15,
-                  fontWeight: pw.FontWeight.bold,
-                )),
-            pw.Text(
-                'Balance Amount                                             : ' +
-                    netAmountController.text.toString(),
-                style: pw.TextStyle(
-                  fontSize: 15,
-                  fontWeight: pw.FontWeight.bold,
-                )),
+                pw.Text(
+                    'Total Cash Received Amount With Interest : ' +
+                        totalCashReceivedAmountWithInterestController.text
+                            .toString(),
+                    style: pw.TextStyle(
+                      fontSize: 15,
+                      fontWeight: pw.FontWeight.bold,
+                    )),
+                pw.Text(
+                    'Balance Amount                                             : ' +
+                        netAmountController.text.toString(),
+                    style: pw.TextStyle(
+                      fontSize: 15,
+                      fontWeight: pw.FontWeight.bold,
+                    )),
               ]),
     );
   }
 
   renderTableRows(listOfBillsByFarmerName) {
     DateFormat dateFormat = DateFormat('dd/MM/yyyy');
-    listOfBillsByFarmerName.sort((a,b) {
+    listOfBillsByFarmerName.sort((a, b) {
       DateTime adate = dateFormat.parse(a['billdate']);
       DateTime bdate = dateFormat.parse(b['billdate']);
       return -adate.compareTo(bdate);
@@ -361,5 +347,18 @@ class ReportState extends State<Report> {
     final output = await getExternalStorageDirectory();
     final file = File("${output.path}/example.pdf");
     await file.writeAsBytes(pdf.save());
+  }
+
+  bool isFormValidationSuccess() {
+    if (selectedFarmerValue == null) {
+      Utilities.showAlert(context, ' ooops!!!', 'Please select a farmer');
+      return false;
+    }
+    if (selectedInterestRateValue == null) {
+      Utilities.showAlert(
+          context, ' ooops!!!', 'Please select a Interest Rate');
+      return false;
+    }
+    return true;
   }
 }

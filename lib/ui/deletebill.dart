@@ -180,19 +180,24 @@ class DeleteBillState extends State<DeleteBill> {
         color: Theme.of(context).primaryColorDark,
         textColor: Theme.of(context).primaryColorLight,
         onPressed: () {
-          if (transactionFormKey.currentState.validate()) {
-            String contentMsg = "Are you sure You want to Delete the Bill: " +
-                selectedBillNoValue.toString() +
-                " ?";
-            new Utilities()
-                .renderAlert(context, contentMsg, deleteByBillAction, progressdialog);
+          if (isDeleteByBillValidationSuccess()) {
+            if (transactionFormKey.currentState.validate()) {
+              String contentMsg = "Are you sure You want to Delete the Bill: " +
+                  selectedBillNoValue.toString() +
+                  " ?";
+              new Utilities().renderAlert(
+                  context, contentMsg, deleteByBillAction, progressdialog);
+            }
           }
         });
   }
 
   deleteByBillAction() {
     new Transactions().deleteByBill(
-        selectedBillNoValue.toLowerCase().toString(), context, this, progressdialog);
+        selectedBillNoValue.toLowerCase().toString(),
+        context,
+        this,
+        progressdialog);
   }
 
   renderDeleteByRangeOfBillsButton() {
@@ -208,15 +213,17 @@ class DeleteBillState extends State<DeleteBill> {
         color: Theme.of(context).primaryColorDark,
         textColor: Theme.of(context).primaryColorLight,
         onPressed: () {
-          if (transactionFormKey.currentState.validate()) {
-            String contentMsg =
-                "Are you sure You want to Delete the Bills From : " +
-                    billsStartDateController.text.toString() +
-                    " To : " +
-                    billsEndDateController.text.toString() +
-                    " ?";
-            new Utilities()
-                .renderAlert(context, contentMsg, deleteByRangeOfBillsAction, progressdialog);
+          if (isDeleteByDateRangeValidationSuccess()) {
+            if (transactionFormKey.currentState.validate()) {
+              String contentMsg =
+                  "Are you sure You want to Delete the Bills From : " +
+                      billsStartDateController.text.toString() +
+                      " To : " +
+                      billsEndDateController.text.toString() +
+                      " ?";
+              new Utilities().renderAlert(context, contentMsg,
+                  deleteByRangeOfBillsAction, progressdialog);
+            }
           }
         });
   }
@@ -227,6 +234,35 @@ class DeleteBillState extends State<DeleteBill> {
         billsStartDateController.text.toLowerCase().toString(),
         billsEndDateController.text.toLowerCase().toString(),
         context,
-        this, progressdialog);
+        this,
+        progressdialog);
+  }
+
+  bool isDeleteByBillValidationSuccess() {
+    if (selectedFarmerValue == null) {
+      Utilities.showAlert(context, ' ooops!!!', 'Please select a farmer');
+      return false;
+    }
+    if (selectedBillNoValue == null) {
+      Utilities.showAlert(context, ' ooops!!!', 'Please select a Bill No');
+      return false;
+    }
+    return true;
+  }
+
+  bool isDeleteByDateRangeValidationSuccess() {
+    if (selectedFarmerValue == null) {
+      Utilities.showAlert(context, ' ooops!!!', 'Please select a farmer');
+      return false;
+    }
+    if (billsStartDateController.text.isEmpty) {
+      Utilities.showAlert(context, ' ooops!!!', 'Please enter Start date');
+      return false;
+    }
+    if (billsEndDateController.text.isEmpty) {
+      Utilities.showAlert(context, ' ooops!!!', 'Please enter End date');
+      return false;
+    }
+    return true;
   }
 }

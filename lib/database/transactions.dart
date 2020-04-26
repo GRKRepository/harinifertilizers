@@ -29,7 +29,7 @@ class Transactions {
       documentReference.get().then((datasnapshot) {
         if (datasnapshot.exists) {
           progressdialog.hide();
-          showAlert(context, 'ooops!!!', 'Bill No already existed');
+          Utilities.showAlert(context, 'ooops!!!', 'Bill No already existed');
         } else {
           Firestore.instance
               .collection('bills')
@@ -53,12 +53,12 @@ class Transactions {
                     state.selectedTypeValue = null,
                     state.setState(() {}),
                     progressdialog.hide(),
-                    showAlert(context, 'Success!!!', 'Bill Saved Successfully')
+                    Utilities.showAlert(
+                        context, 'Success!!!', 'Bill Saved Successfully')
                   })
               .catchError((err) => {
                     progressdialog.hide(),
-                    new Transactions()
-                        .showAlert(context, 'Failed!!!', err.toString())
+                    Utilities.showAlert(context, 'Failed!!!', err.toString())
                   });
         }
       });
@@ -186,45 +186,6 @@ class Transactions {
     return filteredListOfBills;
   }
 
-  showAlert(BuildContext context, String title, String content) {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-              borderRadius: new BorderRadius.circular(18.0),
-              side: BorderSide(color: Colors.blue)),
-          title: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Icon(
-              Icons.sentiment_satisfied,
-              size: 40.0,
-            ),
-            Text(title,
-                textAlign: TextAlign.center, style: TextStyle(fontSize: 22.0)),
-          ]),
-          /*Text(title, textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 22.0
-            )),*/
-          content: Text(content,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16.0,
-              )),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Ok'),
-              onPressed: () {
-                //Navigator.of(context,rootNavigator: true).pop();//close the dialoge
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   fetchBillsByFarmerName(selectedFarmerValue, selectedInterestRateValue,
       interestTillDateController, state, context, progressdialog) {
     DateFormat dateFormat = DateFormat('dd/MM/yyyy');
@@ -251,50 +212,49 @@ class Transactions {
         .then((snapshot) => {
               snapshot.documents.forEach((document) => {
                     state.listOfBillsByFarmerName.add(document.data),
-                if (document.data['type'].toString().compareTo("anamath") ==
-                    0)
-                  {
-                    billDate = dateFormat.parse(document.data['billdate']),
-                    interestDays = today.difference(billDate).inDays,
-                    anamathInterestAmount =
-                        double.parse(document.data['amount']) *
-                            (((interestRate / 100) / 30) * interestDays),
-                    anamathAmount = anamathAmount +
-                        (double.parse(document.data['amount']) +
-                            anamathInterestAmount),
-                    anamathInterestAmount = 0.0,
-                  },
-                if (document.data['type'].toString().compareTo("credit") ==
-                    0)
-                  {
-                    billDate = dateFormat.parse(document.data['billdate']),
-                    interestDays = today.difference(billDate).inDays,
-                    creditInterestAmount =
-                        double.parse(document.data['amount']) *
-                            (((interestRate / 100) / 30) * interestDays),
-                    creditAmount = creditAmount +
-                        (double.parse(document.data['amount']) +
-                            creditInterestAmount),
-                    creditInterestAmount = 0.0,
-                  },
-                if (document.data['type']
-                    .toString()
-                    .compareTo("cash received") ==
-                    0)
-                  {
-                    billDate = dateFormat.parse(document.data['billdate']),
-                    interestDays = today.difference(billDate).inDays,
-                    cashReceivedInterestAmount =
-                        double.parse(document.data['amount']) *
-                            (((interestRate / 100) / 30) * interestDays),
-                    cashReceivedAmount = cashReceivedAmount +
-                        (double.parse(document.data['amount']) +
-                            cashReceivedInterestAmount),
-                    cashReceivedInterestAmount = 0.0,
-                  }
+                    if (document.data['type'].toString().compareTo("anamath") ==
+                        0)
+                      {
+                        billDate = dateFormat.parse(document.data['billdate']),
+                        interestDays = today.difference(billDate).inDays,
+                        anamathInterestAmount =
+                            double.parse(document.data['amount']) *
+                                (((interestRate / 100) / 30) * interestDays),
+                        anamathAmount = anamathAmount +
+                            (double.parse(document.data['amount']) +
+                                anamathInterestAmount),
+                        anamathInterestAmount = 0.0,
+                      },
+                    if (document.data['type'].toString().compareTo("credit") ==
+                        0)
+                      {
+                        billDate = dateFormat.parse(document.data['billdate']),
+                        interestDays = today.difference(billDate).inDays,
+                        creditInterestAmount =
+                            double.parse(document.data['amount']) *
+                                (((interestRate / 100) / 30) * interestDays),
+                        creditAmount = creditAmount +
+                            (double.parse(document.data['amount']) +
+                                creditInterestAmount),
+                        creditInterestAmount = 0.0,
+                      },
+                    if (document.data['type']
+                            .toString()
+                            .compareTo("cash received") ==
+                        0)
+                      {
+                        billDate = dateFormat.parse(document.data['billdate']),
+                        interestDays = today.difference(billDate).inDays,
+                        cashReceivedInterestAmount =
+                            double.parse(document.data['amount']) *
+                                (((interestRate / 100) / 30) * interestDays),
+                        cashReceivedAmount = cashReceivedAmount +
+                            (double.parse(document.data['amount']) +
+                                cashReceivedInterestAmount),
+                        cashReceivedInterestAmount = 0.0,
+                      }
                   }),
               state.setState(() {
-
                 state.totalAnamathAmountWithInterestController.text =
                     anamathAmount.toStringAsFixed(2);
 
@@ -310,12 +270,12 @@ class Transactions {
 
                 state.generateReport();
                 progressdialog.hide();
-                showAlert(context, 'Success!!!', 'PDF saved!!!');
+                Utilities.showAlert(context, 'Success!!!', 'PDF saved!!!');
               }),
             })
         .catchError((err) => {
               progressdialog.hide(),
-              new Transactions().showAlert(context, 'Failed!!!', err.toString())
+              Utilities.showAlert(context, 'Failed!!!', err.toString())
             });
   }
 
@@ -387,16 +347,6 @@ class Transactions {
                                 cashReceivedInterestAmount),
                         cashReceivedInterestAmount = 0.0,
                       }
-                    /*else
-                      {
-                        billDate = dateFormat.parse(document.data['billdate']),
-                        interestDays = today.difference(billDate).inDays,
-                        totalAmount =
-                            totalAmount + double.parse(document.data['amount']),
-                        interestAmount = interestAmount +
-                            double.parse(document.data['amount']) *
-                                (((interestRate / 100) / 30) * interestDays),
-                      }*/
                   }),
               state.setState(() {
                 state.totalAnamathAmountWithInterestController.text =
@@ -408,13 +358,6 @@ class Transactions {
                 state.totalCashReceivedAmountWithInterestController.text =
                     cashReceivedAmount.toStringAsFixed(2);
 
-                /*state.totalAmountController.text =
-                    totalAmount.toStringAsFixed(2);
-                state.interestAmountController.text =
-                    interestAmount.toStringAsFixed(2);
-                state.totalAmountWithInterestController.text =
-                    (totalAmount + interestAmount).toStringAsFixed(2);*/
-
                 state.netAmountController.text =
                     (anamathAmount + creditAmount - cashReceivedAmount)
                         .toStringAsFixed(2);
@@ -423,7 +366,7 @@ class Transactions {
             })
         .catchError((err) => {
               progressdialog.hide(),
-              new Transactions().showAlert(context, 'Failed!!!', err.toString())
+              Utilities.showAlert(context, 'Failed!!!', err.toString())
             });
   }
 
@@ -477,16 +420,16 @@ class Transactions {
                 state.selectedTypeValue = null,
                 state.setState(() {}),
                 progressdialog.hide(),
-                showAlert(context, 'Success!!!', 'Bill Updated Successfully'),
+                Utilities.showAlert(
+                    context, 'Success!!!', 'Bill Updated Successfully'),
               })
           .catchError((err) => {
                 progressdialog.hide(),
-                new Transactions()
-                    .showAlert(context, 'Failed!!!', err.toString())
+                Utilities.showAlert(context, 'Failed!!!', err.toString())
               });
     } else {
       progressdialog.hide();
-      showAlert(context, 'Ooops!!!', 'Enter All fields');
+      Utilities.showAlert(context, 'Ooops!!!', 'Enter All fields');
     }
   }
 
@@ -497,7 +440,7 @@ class Transactions {
         .delete()
         .then((result) => {
               progressdialog.hide(),
-              showAlert(context, 'Success!!!',
+              Utilities.showAlert(context, 'Success!!!',
                   'Bill (' + billNo.toString() + ') Deleted Successfully'),
               state.setState(() {
                 state.selectedFarmerValue = null;
@@ -508,7 +451,7 @@ class Transactions {
             })
         .catchError((err) => {
               progressdialog.hide(),
-              new Transactions().showAlert(context, 'Failed!!!', err.toString())
+              Utilities.showAlert(context, 'Failed!!!', err.toString())
             });
   }
 
@@ -538,7 +481,7 @@ class Transactions {
                           .delete()
                           .catchError((err) => {
                                 progressdialog.hide(),
-                                new Transactions().showAlert(
+                                Utilities.showAlert(
                                     context,
                                     'Failed!!!',
                                     'while deleting (' +
@@ -561,7 +504,7 @@ class Transactions {
             })
         .catchError((err) => {
               progressdialog.hide(),
-              new Transactions().showAlert(context, 'Failed!!!', err.toString())
+              Utilities.showAlert(context, 'Failed!!!', err.toString())
             });
   }
 

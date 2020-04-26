@@ -6,12 +6,12 @@ import 'package:harinifertilizers/ui/utilities.dart';
 import 'package:intl/intl.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
-class TransactionForm extends StatefulWidget {
+class AddBill extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => TransactionFormState();
+  State<StatefulWidget> createState() => AddBillState();
 }
 
-class TransactionFormState extends State<TransactionForm> {
+class AddBillState extends State<AddBill> {
   final transactionFormKey = GlobalKey<FormState>();
   final alphanumeric = RegExp(r'^[a-zA-Z0-9]+$');
   String selectedFarmerValue;
@@ -34,7 +34,7 @@ class TransactionFormState extends State<TransactionForm> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Transaction Form",
+          "Add Bill",
         ),
       ),
       body: Container(
@@ -185,19 +185,21 @@ class TransactionFormState extends State<TransactionForm> {
             borderRadius: new BorderRadius.circular(18.0),
             side: BorderSide(color: Colors.blue)),
         icon: Icon(
-          Icons.save,
+          Icons.add_circle,
           size: 30.0,
         ),
-        label: const Text('Save'),
+        label: const Text('Add Bill'),
         color: Theme.of(context).primaryColorDark,
         textColor: Theme.of(context).primaryColorLight,
         onPressed: () {
-          if (transactionFormKey.currentState.validate()) {
-            String contentMsg = "Are you sure You want to Add the Bill: " +
-                billNoController.text.toString() +
-                " ?";
-            new Utilities().renderAlert(
-                context, contentMsg, addBillAction, progressdialog);
+          if (isFormValidationSuccess()) {
+            if (transactionFormKey.currentState.validate()) {
+              String contentMsg = "Are you sure You want to Add the Bill: " +
+                  billNoController.text.toString() +
+                  " ?";
+              new Utilities().renderAlert(
+                  context, contentMsg, addBillAction, progressdialog);
+            }
           }
         });
   }
@@ -225,5 +227,18 @@ class TransactionFormState extends State<TransactionForm> {
       ),
       foregroundColor: Colors.white,
     );
+  }
+
+  bool isFormValidationSuccess() {
+    if (selectedFarmerValue == null) {
+      Utilities.showAlert(context, ' ooops!!!', 'Please select a farmer');
+      return false;
+    }
+    if (selectedTypeValue == null) {
+      Utilities
+          .showAlert(context, ' ooops!!!', 'Please select a Bill Type');
+      return false;
+    }
+    return true;
   }
 }

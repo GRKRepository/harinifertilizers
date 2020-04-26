@@ -18,9 +18,12 @@ class BillSummaryState extends State<BillSummary> {
   TextEditingController billNoController = TextEditingController();
   TextEditingController totalAmountController = TextEditingController();
   TextEditingController interestAmountController = TextEditingController();
-  TextEditingController totalCashReceivedAmountWithInterestController = TextEditingController();
-  TextEditingController totalAnamathAmountWithInterestController = TextEditingController();
-  TextEditingController totalCreditAmountWithInterestController = TextEditingController();
+  TextEditingController totalCashReceivedAmountWithInterestController =
+      TextEditingController();
+  TextEditingController totalAnamathAmountWithInterestController =
+      TextEditingController();
+  TextEditingController totalCreditAmountWithInterestController =
+      TextEditingController();
   TextEditingController netAmountController = TextEditingController();
   TextEditingController totalAmountWithInterestController =
       TextEditingController();
@@ -43,7 +46,7 @@ class BillSummaryState extends State<BillSummary> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Bill Summary",
+          "Farmer Summary",
         ),
       ),
       body: Container(
@@ -228,7 +231,9 @@ class BillSummaryState extends State<BillSummary> {
           });
         },
         controller: interestTillDateController,
-        decoration: InputDecoration(hintText: 'Interest Till Date', suffixIcon: const Icon(Icons.calendar_today, size: 30.0)),
+        decoration: InputDecoration(
+            hintText: 'Interest Till Date',
+            suffixIcon: const Icon(Icons.calendar_today, size: 30.0)),
         validator: (value) {
           if (value.isEmpty) {
             return 'Please enter interest till date';
@@ -278,14 +283,29 @@ class BillSummaryState extends State<BillSummary> {
         color: Theme.of(context).primaryColorDark,
         textColor: Theme.of(context).primaryColorLight,
         onPressed: () {
-          progressdialog.show();
-          new Transactions().billsSearchByFarmerName(
-              selectedFarmerValue.toLowerCase().replaceAll(" ", ""),
-              selectedInterestRateValue,
-              interestTillDateController,
-              this,
-              context,
-              progressdialog);
+          if (isFormValidationSuccess()) {
+            progressdialog.show();
+            new Transactions().billsSearchByFarmerName(
+                selectedFarmerValue.toLowerCase().replaceAll(" ", ""),
+                selectedInterestRateValue,
+                interestTillDateController,
+                this,
+                context,
+                progressdialog);
+          }
         });
+  }
+
+  bool isFormValidationSuccess() {
+    if (selectedFarmerValue == null) {
+      Utilities.showAlert(context, ' ooops!!!', 'Please select a farmer');
+      return false;
+    }
+    if (selectedInterestRateValue == null) {
+      Utilities.showAlert(
+          context, ' ooops!!!', 'Please select a Interest Rate');
+      return false;
+    }
+    return true;
   }
 }

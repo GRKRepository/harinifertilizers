@@ -22,7 +22,13 @@ class LoginPageState extends State<LoginPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Login Page",
+          "Harini Fertilizers",
+        ),
+        leading: GestureDetector(
+          onTap: () {},
+          child: Icon(
+            Icons.menu, // add custom icons also
+          ),
         ),
       ),
       body: Container(
@@ -42,7 +48,7 @@ class LoginPageState extends State<LoginPage> {
                       keyboardType: TextInputType.text,
                       validator: (value) {
                         if (value.trim().isEmpty) {
-                          return 'Please enter user name';
+                          return 'Please enter username';
                         }
                         return null;
                       }),
@@ -50,8 +56,10 @@ class LoginPageState extends State<LoginPage> {
                       controller: passwordController,
                       decoration: InputDecoration(
                           hintText: 'password',
-                          suffixIcon: const Icon(Icons.fingerprint, size: 30.0)),
+                          suffixIcon:
+                              const Icon(Icons.fingerprint, size: 30.0)),
                       keyboardType: TextInputType.text,
+                      obscureText: true,
                       validator: (value) {
                         if (value.trim().isEmpty) {
                           return 'Please enter password';
@@ -81,10 +89,16 @@ class LoginPageState extends State<LoginPage> {
         color: Theme.of(context).primaryColorDark,
         textColor: Theme.of(context).primaryColorLight,
         onPressed: () {
-          Navigator.of(context).push(new MaterialPageRoute(
-              builder: (context) => new HomePage(),
-              maintainState: true));
+          if (loginFormKey.currentState.validate()) {
+            if (userNameController.text.toString() == 'Gutta' &&
+                passwordController.text.toString() == 'GRKprojects') {
+              Navigator.of(context).push(new MaterialPageRoute(
+                  builder: (context) => new HomePage(), maintainState: true));
+            } else {
+              Utilities.showAlert(
+                  context, " oops!!!", "Username and Password are Incorrect");
+            }
+          }
         });
   }
-
 }

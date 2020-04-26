@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:harinifertilizers/database/transactions.dart';
-import 'package:harinifertilizers/ui/registerform.dart';
 import 'package:harinifertilizers/ui/utilities.dart';
 
 class WriteRegisteredFarmers {
@@ -24,7 +22,7 @@ class WriteRegisteredFarmers {
       documentReference.get().then((datasnapshot) {
         if (datasnapshot.exists) {
           progressdialog.hide();
-          showAlert(context, 'ooops!!!', 'Farmer already existed');
+          Utilities.showAlert(context, ' ooops!!!', 'Farmer already existed');
         } else {
           Firestore.instance
               .collection('farmers')
@@ -41,20 +39,20 @@ class WriteRegisteredFarmers {
                     nameController.clear(),
                     phoneNumberController.clear(),
                     progressdialog.hide(),
-                    new Transactions()
-                        .showAlert(context, 'Success!!!', 'Saved Successfully')
+                    Utilities.showAlert(
+                        context, 'Success!!!', 'Saved Successfully')
                   })
               .catchError((err) => {
                     progressdialog.hide(),
-                    new Transactions()
-                        .showAlert(context, 'Failed!!!', err.toString())
+                    Utilities.showAlert(context, 'Failed!!!', err.toString())
                   });
         }
       });
     }
   }
 
-  updateFarmerDetails(selectedFarmerValue, phoneNumber, context, state, progressdialog) {
+  updateFarmerDetails(
+      selectedFarmerValue, phoneNumber, context, state, progressdialog) {
     Firestore.instance
         .collection('farmers')
         .document(selectedFarmerValue)
@@ -64,32 +62,13 @@ class WriteRegisteredFarmers {
                 state.selectedFarmerValue = null;
                 state.phoneNumberController.clear();
               }),
-      progressdialog.hide(),
-              showAlert(context, 'Success!!!', 'updated Successfully')
+              progressdialog.hide(),
+              Utilities.showAlert(
+                  context, 'Success!!!', 'Farmer details Updated'),
             })
         .catchError((err) => {
-      progressdialog.hide(),
-              new Transactions().showAlert(context, 'Failed!!!', err.toString())
+              progressdialog.hide(),
+              Utilities.showAlert(context, 'Failed!!!', err.toString())
             });
-  }
-
-  showAlert(BuildContext context, String title, String content) {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(content),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Ok'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 }

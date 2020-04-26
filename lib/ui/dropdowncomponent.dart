@@ -1,8 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:harinifertilizers/database/writeregisteredfarmers.dart';
-import 'package:harinifertilizers/ui/registeredfarmers.dart';
-import 'package:intl/intl.dart';
 
 class DropdownComponent extends StatefulWidget {
   @override
@@ -55,11 +51,15 @@ class DropdownComponentState extends State<DropdownComponent> {
       ),
       onChanged: (String newValue) {
         setState(() {
-              dropdownValue = newValue;
+          dropdownValue = newValue;
         });
       },
-      items: <String>['Rama Koteswararao', 'Rajeswarararo', 'Suneetha Gutta', 'Akshara Gutta']
-          .map<DropdownMenuItem<String>>((String value) {
+      items: <String>[
+        'Rama Koteswararao',
+        'Rajeswarararo',
+        'Suneetha Gutta',
+        'Akshara Gutta'
+      ].map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
           child: Text(value),

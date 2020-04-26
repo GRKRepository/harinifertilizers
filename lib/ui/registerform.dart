@@ -1,7 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:harinifertilizers/database/writeregisteredfarmers.dart';
-import 'package:harinifertilizers/ui/registeredfarmers.dart';
 import 'package:harinifertilizers/ui/updatefarmer.dart';
 import 'package:harinifertilizers/ui/utilities.dart';
 import 'package:progress_dialog/progress_dialog.dart';

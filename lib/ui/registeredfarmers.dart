@@ -26,17 +26,7 @@ class RegisteredFarmersState extends State<RegisteredFarmers> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Registered Farmers"),
-       // backgroundColor: Colors.blue,
-        /*leading: new IconButton(
-          icon: new Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => new HomePage()),
-            );
-          },
-        ),*/
+        title: Text("Farmers"),
       ),
       body: SafeArea(
           child: Scrollbar(

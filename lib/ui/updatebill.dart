@@ -69,7 +69,8 @@ class UpdateBillState extends State<UpdateBill> {
     return DropdownButton<String>(
       isExpanded: true,
       value: selectedFarmerValue,
-      hint: Text('Please select a farmer  ', style: TextStyle(fontFamily: 'Quicksand')),
+      hint: Text('Please select a farmer  ',
+          style: TextStyle(fontFamily: 'Quicksand')),
       icon: Icon(Icons.arrow_drop_down),
       iconSize: 40.0,
       // elevation: 16,
@@ -81,9 +82,11 @@ class UpdateBillState extends State<UpdateBill> {
       onChanged: (String newValue) {
         setState(() {
           selectedFarmerValue = newValue;
-          new ReadRegisteredFarmers().fetchFarmerBillNos(selectedFarmerValue.replaceAll(" ", "").toLowerCase().toString(), famerBillNos, this);
-          setState(() {
-          });
+          new ReadRegisteredFarmers().fetchFarmerBillNos(
+              selectedFarmerValue.replaceAll(" ", "").toLowerCase().toString(),
+              famerBillNos,
+              this);
+          setState(() {});
         });
       },
       items: famerNames.map<DropdownMenuItem<String>>((String value) {
@@ -99,7 +102,8 @@ class UpdateBillState extends State<UpdateBill> {
     return DropdownButton<String>(
       isExpanded: true,
       value: selectedBillNoValue,
-      hint: Text('Please select a Bill No  ', style: TextStyle(fontFamily: 'Quicksand')),
+      hint: Text('Please select a Bill No  ',
+          style: TextStyle(fontFamily: 'Quicksand')),
       icon: Icon(Icons.arrow_drop_down),
       iconSize: 40.0,
       // elevation: 16,
@@ -111,9 +115,11 @@ class UpdateBillState extends State<UpdateBill> {
       onChanged: (String newValue) {
         setState(() {
           selectedBillNoValue = newValue;
-          new ReadRegisteredFarmers().fetchFarmerBillNoBasedAmountAndDate(selectedFarmerValue.replaceAll(" ", "").toLowerCase().toString(), selectedBillNoValue.toLowerCase().toString(), this);
-          setState(() {
-          });
+          new ReadRegisteredFarmers().fetchFarmerBillNoBasedAmountAndDate(
+              selectedFarmerValue.replaceAll(" ", "").toLowerCase().toString(),
+              selectedBillNoValue.toLowerCase().toString(),
+              this);
+          setState(() {});
         });
       },
       items: famerBillNos.map<DropdownMenuItem<String>>((String value) {
@@ -128,7 +134,9 @@ class UpdateBillState extends State<UpdateBill> {
   renderAmount() {
     return TextFormField(
         controller: amountController,
-        decoration: InputDecoration(hintText: 'Bill Amount', suffixIcon: const Icon(Icons.edit, size: 30.0)),
+        decoration: InputDecoration(
+            hintText: 'Bill Amount',
+            suffixIcon: const Icon(Icons.edit, size: 30.0)),
         keyboardType: TextInputType.number,
         validator: (value) {
           if (value.trim().isEmpty) {
@@ -157,7 +165,9 @@ class UpdateBillState extends State<UpdateBill> {
           });
         },
         controller: billDateController,
-        decoration: InputDecoration(hintText: 'Bill Date', suffixIcon: const Icon(Icons.calendar_today, size: 30.0)),
+        decoration: InputDecoration(
+            hintText: 'Bill Date',
+            suffixIcon: const Icon(Icons.calendar_today, size: 30.0)),
         validator: (value) {
           if (value.isEmpty) {
             return 'Please enter bill date';
@@ -170,7 +180,8 @@ class UpdateBillState extends State<UpdateBill> {
     return DropdownButton<String>(
       isExpanded: true,
       value: selectedTypeValue,
-      hint: Text('Please select Bill Type  ', style: TextStyle(fontFamily: 'Quicksand')),
+      hint: Text('Please select Bill Type  ',
+          style: TextStyle(fontFamily: 'Quicksand')),
       icon: Icon(Icons.arrow_drop_down),
       iconSize: 40.0,
       elevation: 16,
@@ -199,29 +210,36 @@ class UpdateBillState extends State<UpdateBill> {
         shape: RoundedRectangleBorder(
             borderRadius: new BorderRadius.circular(18.0),
             side: BorderSide(color: Colors.blue)),
-        icon: Icon(Icons.update, size: 30.0,),
+        icon: Icon(
+          Icons.update,
+          size: 30.0,
+        ),
         label: const Text('Update'),
         color: Theme.of(context).primaryColorDark,
         textColor: Theme.of(context).primaryColorLight,
         onPressed: () {
+          if (isFormValidationSuccess()) {
             if (transactionFormKey.currentState.validate()) {
-              String contentMsg = "Are you sure You want to Update the Bill: " +selectedBillNoValue.toString()+
+              String contentMsg = "Are you sure You want to Update the Bill: " +
+                  selectedBillNoValue.toString() +
                   " ?";
-              new Utilities()
-                  .renderAlert(context, contentMsg, updateBillAction, progressdialog);
+              new Utilities().renderAlert(
+                  context, contentMsg, updateBillAction, progressdialog);
             }
-
+          }
         });
   }
 
-  updateBillAction(){
+  updateBillAction() {
     new Transactions().updateBill(
         selectedFarmerValue,
         selectedBillNoValue,
         amountController,
         billDateController,
         selectedTypeValue,
-        context,this,progressdialog);
+        context,
+        this,
+        progressdialog);
   }
 
   renderFloatingButton() {
@@ -235,5 +253,21 @@ class UpdateBillState extends State<UpdateBill> {
       ),
       foregroundColor: Colors.white,
     );
+  }
+
+  bool isFormValidationSuccess() {
+    if (selectedFarmerValue == null) {
+      Utilities.showAlert(context, ' ooops!!!', 'Please select a farmer');
+      return false;
+    }
+    if (selectedBillNoValue == null) {
+      Utilities.showAlert(context, ' ooops!!!', 'Please select a Bill No');
+      return false;
+    }
+    if (selectedTypeValue == null) {
+      Utilities.showAlert(context, ' ooops!!!', 'Please select a Bill Type');
+      return false;
+    }
+    return true;
   }
 }

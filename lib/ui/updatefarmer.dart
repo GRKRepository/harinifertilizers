@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:harinifertilizers/database/readregisteredfarmers.dart';
-import 'package:harinifertilizers/database/transactions.dart';
 import 'package:harinifertilizers/database/writeregisteredfarmers.dart';
-import 'package:harinifertilizers/ui/registeredfarmers.dart';
 import 'package:harinifertilizers/ui/utilities.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 
@@ -34,7 +32,7 @@ class UpdateFarmerState extends State<UpdateFarmer> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Farmer Details Update Form",
+          "Update Farmer",
         ),
       ),
       body: Container(
@@ -84,12 +82,15 @@ class UpdateFarmerState extends State<UpdateFarmer> {
                           color: Theme.of(context).primaryColorDark,
                           textColor: Theme.of(context).primaryColorLight,
                           onPressed: () {
+                            if (isFormValidationSuccess()) {
                               if (registerFormKey.currentState.validate()) {
-                                String contentMsg = "Are you sure You want to Update the farmer: " +
-                                    selectedFarmerValue.toString();
-                                new Utilities()
-                                    .renderAlert(context, contentMsg, updateAction, progressdialog);
+                                String contentMsg =
+                                    "Are you sure You want to Update the farmer: " +
+                                        selectedFarmerValue.toString();
+                                new Utilities().renderAlert(context, contentMsg,
+                                    updateAction, progressdialog);
                               }
+                            }
                           })),
                   Padding(
                       padding: EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 0.0),
@@ -109,13 +110,15 @@ class UpdateFarmerState extends State<UpdateFarmer> {
                           color: Theme.of(context).primaryColorDark,
                           textColor: Theme.of(context).primaryColorLight,
                           onPressed: () {
+                            if (isFormValidationSuccess()) {
                               if (registerFormKey.currentState.validate()) {
-                                String contentMsg = "Are you sure You want to Delete the farmer: " +
-                                    selectedFarmerValue.toString();
-                                new Utilities()
-                                    .renderAlert(context, contentMsg, deleteAction, progressdialog);
+                                String contentMsg =
+                                    "Are you sure You want to Delete the farmer: " +
+                                        selectedFarmerValue.toString();
+                                new Utilities().renderAlert(context, contentMsg,
+                                    deleteAction, progressdialog);
                               }
-
+                            }
                           })),
                 ],
               ),
@@ -124,26 +127,18 @@ class UpdateFarmerState extends State<UpdateFarmer> {
     );
   }
 
-  updateAction(){
-    new WriteRegisteredFarmers()
-        .updateFarmerDetails(
-        selectedFarmerValue
-            .replaceAll(" ", "")
-            .toLowerCase(),
-        phoneNumberController.text
-            .toLowerCase()
-            .toString(),
+  updateAction() {
+    new WriteRegisteredFarmers().updateFarmerDetails(
+        selectedFarmerValue.replaceAll(" ", "").toLowerCase(),
+        phoneNumberController.text.toLowerCase().toString(),
         context,
         this,
         progressdialog);
   }
 
-  deleteAction(){
+  deleteAction() {
     new ReadRegisteredFarmers().deleteFarmerByName(
-        selectedFarmerValue
-            .replaceAll(" ", "")
-            .toLowerCase()
-            .toString(),
+        selectedFarmerValue.replaceAll(" ", "").toLowerCase().toString(),
         context,
         this,
         progressdialog);
@@ -180,5 +175,13 @@ class UpdateFarmerState extends State<UpdateFarmer> {
         );
       }).toList(),
     );
+  }
+
+  bool isFormValidationSuccess() {
+    if (selectedFarmerValue == null) {
+      Utilities.showAlert(context, ' ooops!!!', 'Please select a farmer');
+      return false;
+    }
+    return true;
   }
 }

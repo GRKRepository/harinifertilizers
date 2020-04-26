@@ -1,7 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:harinifertilizers/database/writeregisteredfarmers.dart';
-import 'package:harinifertilizers/ui/registeredfarmers.dart';
 import 'package:intl/intl.dart';
 
 class DateComponent extends StatefulWidget {
