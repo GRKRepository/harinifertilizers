@@ -27,7 +27,7 @@ class RegisterFormState extends State<RegisterForm> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Registration Form",
+          "Add Farmer",
         ),
       ),
       body: Container(
